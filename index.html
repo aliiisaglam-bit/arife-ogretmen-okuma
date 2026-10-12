@@ -1,0 +1,1323 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#174a3f">
+  <meta name="description" content="Arife Öğretmen ile etkileşimli merdiven okuma, süreli metin okuma ve öğrenci gelişim raporları.">
+  <title>Akıcı Okuma Hikâyeleri | Arife Öğretmen</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23174a3f'/%3E%3Cpath d='M14 44h12V32h12V20h12' fill='none' stroke='%23ffd166' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --ink: #173b35;
+      --forest: #174a3f;
+      --leaf: #2f7d66;
+      --mint: #dff3e9;
+      --sun: #ffd166;
+      --paper: #fffdf8;
+      --mist: #edf5f1;
+      --line: #c8ddd4;
+      --shadow: 0 22px 60px rgba(23, 74, 63, .14);
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 12%, rgba(255,209,102,.32), transparent 24rem),
+        radial-gradient(circle at 94% 82%, rgba(47,125,102,.2), transparent 28rem),
+        #f4f8f5;
+      font-family: "Trebuchet MS", system-ui, sans-serif;
+      padding-left: env(safe-area-inset-left, 0);
+      padding-right: env(safe-area-inset-right, 0);
+    }
+    button, select, input { font: inherit; }
+    button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+    .shell { width: min(940px, calc(100% - 28px)); margin: 0 auto; padding: 24px 0 36px; }
+    header { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 18px; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .mark { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 15px; color: var(--sun); background: var(--forest); font-size: 25px; font-weight: 900; }
+    h1 { margin: 0; font-size: clamp(1.1rem, 3vw, 1.55rem); line-height: 1.1; }
+    .teacher { margin: 4px 0 0; color: #53746c; font-size: .88rem; }
+    .reset { border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,.7); color: var(--forest); padding: 10px 15px; cursor: pointer; font-weight: 700; }
+    .reset:hover { background: white; }
+    .student-tools { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+    .student-select { min-height: 42px; max-width: 190px; border: 1px solid var(--line); border-radius: 12px; background: white; color: var(--ink); padding: 8px 10px; font: inherit; font-weight: 800; }
+    .add-student { border: 0; border-radius: 12px; background: var(--sun); color: #29200b; padding: 11px 13px; cursor: pointer; font-weight: 900; }
+    .progress-card { padding: 14px 18px; border: 1px solid rgba(200,221,212,.9); border-radius: 18px; background: rgba(255,255,255,.72); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+    .story-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 28px; text-align: left; }
+    .story-card { display: flex; flex-direction: column; min-height: 190px; border: 2px solid var(--line); border-radius: 22px; padding: 22px; color: var(--ink); background: white; cursor: pointer; transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease; }
+    .story-card:hover, .story-card:focus-visible { transform: translateY(-3px); border-color: var(--leaf); box-shadow: 0 14px 28px rgba(23,74,63,.12); }
+    .story-number { color: var(--leaf); font-size: .82rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+    .story-card h3 { margin: 12px 0 7px; font-size: 1.3rem; line-height: 1.25; }
+    .story-card p { margin: 0; color: #58756d; line-height: 1.5; }
+    .story-status { display: inline-flex; align-self: flex-start; margin-top: auto; padding-top: 18px; color: var(--forest); font-size: .9rem; font-weight: 900; }
+    .progress-meta { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 9px; font-size: .9rem; font-weight: 700; }
+    .track { height: 10px; overflow: hidden; border-radius: 99px; background: #dfeae5; }
+    .bar { height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, var(--leaf), #56aa78); transition: width .35s ease; }
+    main { margin-top: 18px; }
+    .card { position: relative; overflow: hidden; min-height: 610px; padding: clamp(22px, 5vw, 48px); border: 1px solid rgba(200,221,212,.95); border-radius: 32px; background: rgba(255,253,248,.96); box-shadow: var(--shadow); }
+    .card::before { content: ""; position: absolute; width: 240px; height: 240px; top: -150px; right: -90px; border-radius: 50%; background: var(--mint); }
+    .eyebrow { position: relative; margin: 0 0 10px; color: var(--leaf); font-size: .84rem; font-weight: 900; letter-spacing: .13em; text-transform: uppercase; }
+    h2 { position: relative; margin: 0; font-size: clamp(1.55rem, 5vw, 2.55rem); line-height: 1.16; }
+    .instruction { position: relative; margin: 12px auto 0; max-width: 590px; color: #58756d; font-size: 1rem; line-height: 1.6; text-align: center; }
+    .word-stage { display: grid; place-items: center; min-height: 260px; padding: 34px 0 22px; }
+    .word-box { min-width: min(480px, 88%); padding: clamp(30px, 8vw, 62px) 24px; border: 4px solid var(--sun); border-radius: 28px; background: white; box-shadow: 0 16px 0 rgba(255,209,102,.2); color: var(--forest); text-align: center; font-size: clamp(2.2rem, 9vw, 5rem); font-weight: 900; line-height: 1; overflow-wrap: anywhere; animation: enter .22s ease-out; }
+    @keyframes enter { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
+    .word-count { margin-top: 25px; color: #668078; font-weight: 700; }
+    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; max-width: 660px; margin: 0 auto; }
+    .action { min-height: 62px; border: 0; border-radius: 18px; padding: 14px 18px; cursor: pointer; font-weight: 900; transition: transform .12s ease, box-shadow .12s ease; }
+    .action:hover { transform: translateY(-2px); }
+    .action:active { transform: translateY(0); }
+    .again { color: #704b12; background: #fff0bd; box-shadow: 0 8px 18px rgba(147,100,21,.12); }
+    .known { color: white; background: var(--forest); box-shadow: 0 8px 18px rgba(23,74,63,.2); }
+    .sentence-center { text-align: center; }
+    .ladder { display: grid; gap: 10px; margin: 30px auto; max-width: 760px; }
+    .step { width: var(--w); max-width: 100%; justify-self: center; padding: 13px 16px; border: 2px solid #8bbba8; border-radius: 13px; background: var(--mint); color: var(--ink); font-size: clamp(1rem, 2.8vw, 1.35rem); font-weight: 900; cursor: pointer; animation: enter .25s both; }
+    .step:hover:not(:disabled), .step:focus-visible:not(:disabled) { border-color: var(--forest); box-shadow: 0 7px 18px rgba(23,74,63,.14); transform: translateY(-1px); }
+    .step:disabled { color: var(--ink); cursor: default; opacity: 1; }
+    .new-word { display: inline-block; margin-right: .28em; padding: .16em .48em; border-radius: 8px; background: var(--sun); color: #111; line-height: 1.25; }
+    .step .new-word:only-child { margin-right: 0; }
+    .step:last-child { border-color: var(--forest); background: #c7e7d8; }
+    .continue { display: block; width: min(390px, 100%); margin: 22px auto 0; color: white; background: var(--forest); }
+    .story { position: relative; max-width: 720px; margin: 30px auto 0; padding: clamp(22px, 5vw, 42px); border: 1px solid #ead99b; border-radius: 22px; background: #fff7cf; font-family: "Trebuchet MS", system-ui, sans-serif; font-size: clamp(1.35rem, 3vw, 1.7rem); font-weight: 650; line-height: 1.9; text-align: left; }
+    .success { display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; padding: 10px 15px; border-radius: 999px; color: var(--forest); background: var(--mint); font-weight: 900; }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 720px; margin: 24px auto 0; }
+    .stat { padding: 16px 10px; border: 1px solid var(--line); border-radius: 16px; background: white; }
+    .stat strong { display: block; color: var(--forest); font-size: clamp(1.55rem, 4vw, 2rem); }
+    .stat span { color: #58756d; font-size: .9rem; font-weight: 800; }
+    .story-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
+    .timer { display: inline-flex; min-width: 132px; justify-content: center; margin-top: 18px; padding: 10px 18px; border-radius: 999px; color: white; background: var(--forest); font-size: 1.35rem; font-weight: 900; font-variant-numeric: tabular-nums; }
+    .finish-reading { display: block; width: min(320px, 100%); margin: 24px auto 0; color: white; background: #b33a2f; box-shadow: 0 8px 18px rgba(179,58,47,.2); }
+    .result-pair { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; max-width: 720px; margin: 28px auto 0; }
+    .result-card { padding: 24px 16px; border: 2px solid var(--line); border-radius: 20px; background: white; }
+    .result-card strong { display: block; color: var(--forest); font-size: clamp(1.8rem, 5vw, 2.8rem); }
+    .result-card span { color: #58756d; font-weight: 800; }
+    .report-list { display: grid; gap: 14px; max-width: 760px; margin: 26px auto 0; text-align: left; }
+    .report-row { padding: 18px; border: 1px solid var(--line); border-radius: 18px; background: white; }
+    .report-head { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 13px; font-weight: 900; }
+    .report-date { color: #668078; font-size: .86rem; white-space: nowrap; }
+    .metric { display: grid; grid-template-columns: 145px 1fr 68px; align-items: center; gap: 10px; margin-top: 9px; font-size: .9rem; font-weight: 800; }
+    .metric-track { height: 12px; overflow: hidden; border-radius: 99px; background: #e4eee9; }
+    .metric-fill { height: 100%; border-radius: inherit; background: var(--sun); }
+    .metric-fill.speed { background: var(--leaf); }
+    .empty-report { margin: 30px auto 0; padding: 25px; max-width: 620px; border: 2px dashed var(--line); border-radius: 20px; color: #58756d; background: rgba(255,255,255,.55); }
+    dialog { width: min(440px, calc(100% - 28px)); border: 0; border-radius: 24px; padding: 0; color: var(--ink); background: var(--paper); box-shadow: 0 30px 90px rgba(17,55,47,.3); }
+    dialog::backdrop { background: rgba(15,45,39,.55); backdrop-filter: blur(3px); }
+    .dialog-body { padding: 28px; }
+    .dialog-body h2 { margin-bottom: 10px; }
+    .dialog-body label { display: block; margin: 20px 0 7px; font-weight: 900; }
+    .dialog-body input { width: 100%; min-height: 50px; border: 2px solid var(--line); border-radius: 13px; padding: 10px 13px; color: var(--ink); background: white; font: inherit; font-size: 1.05rem; }
+    .dialog-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 22px; }
+    .manager-list { display: grid; gap: 9px; margin-top: 20px; }
+    .manager-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px; background: white; font-weight: 900; }
+    .danger { border-color: #e6b4ae; color: #9c3028; background: #fff4f2; }
+    .password-error { min-height: 22px; margin: 8px 0 0; color: #a52e25; font-weight: 800; }
+    .manager-empty { padding: 16px; border: 2px dashed var(--line); border-radius: 14px; color: #668078; text-align: center; }
+    .hidden { display: none !important; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+    @media (max-width: 620px) {
+      .shell { width: min(100% - 18px, 940px); padding-top: 12px; }
+      header { align-items: flex-start; }
+      .mark { width: 42px; height: 42px; }
+      .reset { padding: 9px 11px; font-size: .82rem; }
+      .student-tools { max-width: 160px; }
+      .student-select { max-width: 160px; }
+      .card { min-height: calc(100vh - 170px); border-radius: 24px; }
+      .actions { grid-template-columns: 1fr; }
+      .action { min-height: 58px; }
+      .stats { grid-template-columns: 1fr; }
+      .result-pair { grid-template-columns: 1fr; }
+      .metric { grid-template-columns: 1fr; gap: 6px; }
+      .metric strong { justify-self: end; margin-top: -28px; }
+      .story-grid { grid-template-columns: 1fr; }
+    }
+    .usage-badge { display:inline-flex; align-items:center; min-height:38px; padding:8px 13px; border-radius:14px; background:#fff2a8; color:#332600; font-weight:800; font-size:.88rem; white-space:nowrap; }
+    .expired-shell { min-height:100vh; display:grid; place-items:center; padding:24px; background:#fff9de; }
+    .expired-card { width:min(100%,620px); padding:38px 30px; border:1px solid #ead98d; border-radius:28px; background:#fffef7; box-shadow:0 20px 60px rgba(82,65,0,.12); text-align:center; }
+    .expired-card .expired-icon { width:82px; height:82px; display:grid; place-items:center; margin:0 auto 20px; border-radius:24px; background:#fff2a8; font-size:2.2rem; }
+    .expired-card h1 { margin:0 0 12px; font-size:clamp(1.7rem,5vw,2.4rem); }
+    .expired-card p { margin:0; color:#655d43; font-size:1.08rem; line-height:1.65; }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="brand">
+        <div class="mark" aria-hidden="true">⌁</div>
+        <div><h1>Kaplumbağa ile Tavşan</h1><p class="teacher">Arife Öğretmen · Akıcı Okuma</p></div>
+      </div>
+      <div class="student-tools">
+        <button class="reset" id="storyHome" type="button">Hikâyeler</button>
+        <button class="reset" id="reportHome" type="button">Rapor</button>
+        <select class="student-select" id="studentSelect" aria-label="Öğrenci" disabled></select>
+        <span class="usage-badge" id="usageBadge" aria-live="polite">30 gün</span>
+        <button class="reset" id="reset" type="button">Baştan başla</button>
+      </div>
+    </header>
+
+    <section class="progress-card" aria-label="İlerleme">
+      <div class="progress-meta"><span id="sectionLabel">Cümle 1 / 12</span><span id="progressText">%0 tamamlandı</span></div>
+      <div class="track"><div class="bar" id="progressBar"></div></div>
+    </section>
+
+    <main>
+      <section class="card sentence-center" id="libraryView" aria-labelledby="libraryTitle">
+        <p class="eyebrow">Arife Öğretmen · Akıcı Okuma</p>
+        <h2 id="libraryTitle">Bir hikâye seç</h2>
+        <p class="instruction">Her hikâyenin ilerlemesi seçili öğrenci için ayrı kaydedilir.</p>
+        <div class="story-grid" id="storyGrid"></div>
+      </section>
+
+      <section class="card hidden" id="wordView" aria-labelledby="wordTitle">
+        <p class="eyebrow">Önce kelimeleri okuyalım</p>
+        <h2 id="wordTitle">Kutudaki kelimeyi oku</h2>
+        <div class="word-stage">
+          <div class="word-box" id="wordBox" aria-live="polite"></div>
+          <div class="word-count" id="wordCount"></div>
+        </div>
+        <div class="actions">
+          <button class="action again" id="again" type="button">↻ Tekrar okumalıyım</button>
+          <button class="action known" id="known" type="button">✓ Tek seferde okudum</button>
+        </div>
+      </section>
+
+      <section class="card sentence-center hidden" id="ladderView" aria-labelledby="ladderTitle">
+        <p class="eyebrow">Şimdi merdiveni okuyalım</p>
+        <h2 id="ladderTitle">Cümleyi sondan başa tamamla</h2>
+        <p class="instruction">Basamağı oku ve üzerine dokun. Her dokunuşta yeni bir basamak açılacak.</p>
+        <div class="ladder" id="ladder"></div>
+        <button class="action continue hidden" id="nextSentence" type="button">Cümleyi okudum, devam et →</button>
+      </section>
+
+      <section class="card sentence-center hidden" id="reviewPromptView" aria-labelledby="reviewPromptTitle">
+        <p class="eyebrow">Cümle çalışmalarını tamamladın</p>
+        <h2 id="reviewPromptTitle">Tekrar edilen kelimeleri yeniden oku</h2>
+        <p class="instruction"><strong id="reviewPromptCount">0</strong> kelimeyi yeniden okuduktan sonra hikâyenin tamamına geçeceksin.</p>
+        <button class="action continue" id="beginReview" type="button">Tekrar kelimelerine başla →</button>
+      </section>
+
+      <section class="card sentence-center hidden" id="readyView" aria-labelledby="readyTitle">
+        <p class="eyebrow">Hazırlık çalışmaları tamamlandı</p>
+        <h2 id="readyTitle">Metnin tamamını okumaya hazır mısın?</h2>
+        <p class="instruction">Düğmeye bastığın anda kronometre başlayacak. Metni bitirince “Bitti” düğmesine bas.</p>
+        <div class="word-stage" aria-hidden="true">
+          <div class="mark" style="width:92px;height:92px;border-radius:28px;font-size:2.6rem">⌁</div>
+        </div>
+        <button class="action continue" id="beginReading" type="button">Metni okumaya hazırım →</button>
+      </section>
+
+      <section class="card sentence-center hidden" id="storyView" aria-labelledby="storyTitle">
+        <p class="eyebrow">Süreli metin okuma</p>
+        <h2 id="storyTitle">Kaplumbağa ile Tavşan</h2>
+        <div class="timer" id="timer" aria-live="off">00:00</div>
+        <article class="story" id="story"></article>
+        <button class="action finish-reading" id="finishReading" type="button">Bitti</button>
+      </section>
+
+      <section class="card sentence-center hidden" id="resultView" aria-labelledby="resultTitle">
+        <p class="eyebrow">Okuma tamamlandı</p>
+        <h2 id="resultTitle">Okuma sonucu</h2>
+        <div class="result-pair" aria-label="Okuma sonuçları">
+          <div class="result-card"><strong id="resultAccuracy">0 / 0</strong><span>kelimeyi tekrarsız okudu</span></div>
+          <div class="result-card"><strong id="resultKdk">0 KDK</strong><span>dakikadaki kelime sayısı</span></div>
+        </div>
+        <p class="instruction" id="resultTime"></p>
+        <div class="story-actions">
+          <button class="action continue" id="resultReport" type="button">Raporu gör →</button>
+          <button class="reset" id="resultStories" type="button">Hikâyelere dön</button>
+        </div>
+      </section>
+
+      <section class="card sentence-center hidden" id="reportView" aria-labelledby="reportTitle">
+        <p class="eyebrow">Öğrenci gelişimi</p>
+        <h2 id="reportTitle">Okuma raporu</h2>
+        <p class="instruction" id="reportSubtitle">Tamamlanan okumalar burada birikir.</p>
+        <div class="report-list" id="reportList"></div>
+      </section>
+    </main>
+    <div class="sr-only" aria-live="assertive" id="announcement"></div>
+  </div>
+  <script>
+(function () {
+  "use strict";
+  const ACCESS_KEY = "arife-reading-access-30-days-v1";
+  const ACCESS_MS = 30 * 24 * 60 * 60 * 1000;
+
+  function readAccess() {
+    const now = Date.now();
+    let access;
+    try { access = JSON.parse(localStorage.getItem(ACCESS_KEY)); } catch (_) {}
+    if (!access || !Number.isFinite(access.startedAt) || !Number.isFinite(access.expiresAt)) {
+      access = { startedAt: now, expiresAt: now + ACCESS_MS };
+      try { localStorage.setItem(ACCESS_KEY, JSON.stringify(access)); } catch (_) {}
+    }
+    return access;
+  }
+
+  function showExpired() {
+    document.body.innerHTML = '<main class="expired-shell"><section class="expired-card"><div class="expired-icon" aria-hidden="true">⌛</div><h1>Kullanım süresi tamamlandı</h1><p>Bu akıcı okuma çalışmasının 30 günlük kullanım süresi sona erdi.<br>Yeni çalışma için Arife Öğretmen ile iletişime geçebilirsin.</p></section></main>';
+    document.title = "Kullanım süresi tamamlandı";
+  }
+
+  const access = readAccess();
+  if (Date.now() >= access.expiresAt) {
+    showExpired();
+    return;
+  }
+
+  function updateUsageBadge() {
+    const remainingMs = access.expiresAt - Date.now();
+    if (remainingMs <= 0) return showExpired();
+    const badge = document.getElementById("usageBadge");
+    if (badge) badge.textContent = Math.max(1, Math.ceil(remainingMs / 86400000)) + " gün kaldı";
+  }
+
+const stories = [
+  {
+    id: "kaplumbaga-tavsan",
+    title: "Kaplumbağa ile Tavşan",
+    theme: "Sabır ve kararlılık",
+    sentences: [
+      "Ormanda hızlı bir tavşan yaşardı.",
+      "Tavşan her gün hızıyla övünürdü.",
+      "Kaplumbağa onun sözlerini sessizce dinledi.",
+      "Sonunda tavşanı yarışmaya davet etti.",
+      "Orman hayvanları yarış yolunu belirledi.",
+      "Tavşan başlangıçta hızla öne geçti.",
+      "Kaplumbağa yavaşça ama kararlılıkla ilerledi.",
+      "Tavşan ağacın altında dinlenmek istedi.",
+      "Kendine güvenerek derin uykuya daldı.",
+      "Kaplumbağa hiç durmadan yoluna devam etti.",
+      "Kaplumbağa bitiş çizgisine önce ulaştı.",
+      "Tavşan sabrın değerini sonunda anladı."
+    ]
+  },
+  {
+    id: "ye-kurkum-ye",
+    title: "Nasreddin Hoca - Ye Kürküm Ye",
+    theme: "İnsanları görünüşüyle değerlendirmemek",
+    sentences: [
+      "Nasreddin Hoca bir gün davete çağrıldı.",
+      "Hoca eski kıyafetlerini giyip yola çıktı.",
+      "Evin kapısında onu kimse karşılamadı.",
+      "İçeridekiler Hoca'ya pek ilgi göstermedi.",
+      "Hoca sessizce evine geri döndü.",
+      "Bu kez güzel kürkünü giydi.",
+      "Hoca yeniden davet evine geldi.",
+      "Ev sahibi onu saygıyla karşıladı.",
+      "Hoca sofranın başköşesine hemen oturtuldu.",
+      "Önüne en güzel yemekler konuldu.",
+      "Hoca kürkünün ucunu tabağa uzattı.",
+      "Sonra ye kürküm ye dedi.",
+      "Herkes şaşkınlıkla Hoca'ya bakmaya başladı.",
+      "Hoca gördüğü davranışı sakince açıkladı.",
+      "İnsanlara kıyafetleri için değer verilmemeliydi."
+    ]
+  },
+  {
+    id: "tuz-kadar-sevgi",
+    title: "Tuz Kadar Sevgi",
+    theme: "Sevginin ve küçük şeylerin değeri",
+    sentences: [
+      "Bir zamanlar üç kızı olan padişah vardı.",
+      "Padişah kızlarının sevgisini merak etti.",
+      "Büyük kız sevgisini altına benzetti.",
+      "Ortanca kız sevgisini mücevhere benzetti.",
+      "Küçük kız babasını tuz kadar sevdiğini söyledi.",
+      "Padişah bu cevaba çok şaşırdı.",
+      "Padişah tuzun değersiz olduğunu düşündü.",
+      "Küçük kız saraydan ayrılıp teyzesine gitti.",
+      "Teyzesi onu sevgiyle evine kabul etti.",
+      "Günler sonra padişah yemeğe çağrıldı.",
+      "Sofrada birbirinden güzel yemekler vardı.",
+      "Fakat yemeklerin hiçbirine tuz konmamıştı.",
+      "Padişah yemeklerden hiç tat alamadı.",
+      "O anda küçük kızının sözünü hatırladı.",
+      "Tuzun yaşam için değerini anladı.",
+      "Kızını bulup ondan özür diledi.",
+      "Küçük kız babasını sevgiyle bağışladı.",
+      "Aile yeniden mutluluk içinde yaşadı."
+    ]
+  },
+  {
+    id: "aslan-fare",
+    title: "Aslan ile Fare",
+    theme: "Yardımlaşma ve iyilik",
+    sentences: [
+      "Ormanda güçlü bir aslan uyuyordu.",
+      "Küçük fare yanlışlıkla üzerine çıktı.",
+      "Aslan hemen uyanıp küçük fareyi yakaladı.",
+      "Fare ondan kendisini bırakmasını istedi.",
+      "Bir gün yardım edebileceğini söyledi.",
+      "Aslan bu söze gülümseyerek şaşırdı.",
+      "Yine de küçük fareyi bıraktı.",
+      "Birkaç gün sonra aslan tuzağa yakalandı.",
+      "Kalın ipler onu sıkıca tutuyordu.",
+      "Fare aslanın sesini uzaktan duydu.",
+      "Hemen koşup ipleri kemirmeye başladı.",
+      "Fare kısa sürede aslanı kurtardı.",
+      "Aslan küçük dostuna teşekkür etti.",
+      "İyiliğin büyüklükle ölçülmediğini ikisi de öğrendi."
+    ]
+  },
+  {
+    id: "mert-uc-ogut",
+    title: "Mert ve Üç Öğüt",
+    theme: "Dinlemek, düşünmek ve doğru karar vermek",
+    sentences: [
+      "Mert uzak bir köyde ailesiyle yaşardı.",
+      "Bir gün çalışmak için şehre gitti.",
+      "Dürüst bir ustanın yanında işe başladı.",
+      "Mert yıllarca dikkatle ve sabırla çalıştı.",
+      "Eve dönme zamanı sonunda geldi.",
+      "Ustası ona para yerine üç öğüt sundu.",
+      "Mert öğütleri almayı kabul etti.",
+      "İlk öğüt bilmediğin yola sapmamaktı.",
+      "İkinci öğüt merakla tehlikeye yaklaşmamaktı.",
+      "Üçüncü öğüt öfkeliyken karar vermemekti.",
+      "Mert dönüş yolunda öğütleri düşündü.",
+      "Mert bilmediği kestirme yola girmedi.",
+      "Böylece uzun yolunu güvenle tamamladı.",
+      "Gece duyduğu garip gürültüye yaklaşmadı.",
+      "Sabah tehlikeden uzak kaldığını öğrendi.",
+      "Evine ulaşınca hemen karar vermedi.",
+      "Mert sakinleşip ailesini dikkatle dinledi.",
+      "Mert üç öğüdün değerini anladı."
+    ]
+  },
+  {
+    id: "kazan-dogurdu",
+    title: "Nasreddin Hoca - Kazan Doğurdu",
+    theme: "Düşünmek ve tutarlı davranmak",
+    sentences: [
+      "Nasreddin Hoca komşusundan büyük kazanı istedi.",
+      "Komşusu kazanı hemen Hoca'ya verdi.",
+      "Hoca işini bitirip kazanı getirdi.",
+      "Kazanın içinde küçük bir tencere vardı.",
+      "Komşusu küçük tencereyi merakla sordu.",
+      "Hoca kazanın yavruladığını sakince söyledi.",
+      "Komşusu bu habere çok sevindi.",
+      "Küçük tencereyi hemen evine aldı.",
+      "Günler sonra Hoca kazanı yeniden istedi.",
+      "Komşusu kazanı yine sevinerek verdi.",
+      "Fakat Hoca kazanı uzun süre getirmedi.",
+      "Komşusu sonunda Hoca'nın kapısına gitti.",
+      "Hoca kazanın artık yaşamadığını söyledi.",
+      "Komşusu kendi sözündeki çelişkiyi anladı."
+    ]
+  },
+  {
+    id: "agustos-bocegi-karinca",
+    title: "Ağustos Böceği ile Karınca",
+    theme: "Çalışmak ve geleceği düşünmek",
+    sentences: [
+      "Karınca yaz boyunca düzenli çalışıyordu.",
+      "Her gün yuvasına yiyecek taşıyordu.",
+      "Ağustos böceği neşeyle şarkılar söylüyordu.",
+      "Karıncanın çalışmasını uzaktan merakla seyrediyordu.",
+      "Karınca kış hazırlığını ona hatırlattı.",
+      "Ağustos böceği havanın sıcak olduğunu söyledi.",
+      "Günler geçerken serin rüzgârlar başladı.",
+      "Sonunda soğuk kış mevsimi geldi.",
+      "Ağustos böceği yiyecek bulmakta zorlandı.",
+      "Karıncanın kapısını çekinerek yavaşça çaldı.",
+      "Karınca yiyeceklerini onunla sevinçle paylaştı.",
+      "Birlikte gelecek yazı güzelce planladılar.",
+      "Ağustos böceği çalışmanın değerini öğrendi.",
+      "Yeni yaz boyunca karıncaya yardım etti."
+    ]
+  },
+  {
+    id: "karga-tilki",
+    title: "Karga ile Tilki",
+    theme: "Güzel sözlere hemen inanmamak",
+    sentences: [
+      "Karga ağacın yüksek dalında dinleniyordu.",
+      "Gagasında büyük bir peynir vardı.",
+      "Tilki peyniri uzaktan hemen gördü.",
+      "Peyniri almak için plan kurdu.",
+      "Karganın tüylerini uzun uzun övdü.",
+      "Sonra güzel sesini duymak istedi.",
+      "Karga bu sözlere çok sevindi.",
+      "Şarkı söylemek için gagasını açtı.",
+      "Peynir hemen yere doğru düştü.",
+      "Tilki peyniri alıp hızla uzaklaştı.",
+      "Karga yaptığı hatayı sonunda anladı.",
+      "Her güzel söze inanmamayı öğrendi."
+    ]
+  },
+  {
+    id: "coban-kurt",
+    title: "Çoban ile Kurt",
+    theme: "Doğru söylemenin önemi",
+    sentences: [
+      "Genç çoban koyunları tepede otlatıyordu.",
+      "Bazen yalnız kalınca çok sıkılıyordu.",
+      "Bir gün köylülere şaka yapmak istedi.",
+      "Yüksek sesle kurt geldi diye bağırdı.",
+      "Köylüler yardım etmek için koştular.",
+      "Fakat ortalıkta hiçbir kurt yoktu.",
+      "Çoban onların telaşına kahkahayla güldü.",
+      "Ertesi gün aynı şakayı tekrarladı.",
+      "Köylüler yine boşuna tepeye koştular.",
+      "Bir akşam gerçek kurt yaklaştı.",
+      "Çoban korkuyla köylülerden yardım istedi.",
+      "Bu kez kimse ona inanmadı.",
+      "Çoban koyunları güvenli yere götürdü.",
+      "Doğru söylemenin önemini böylece anladı."
+    ]
+  },
+  {
+    id: "birlikten-kuvvet-dogar",
+    title: "Birlikten Kuvvet Doğar",
+    theme: "Birlik olmak ve yardımlaşmak",
+    sentences: [
+      "Yaşlı çiftçinin üç çocuğu vardı.",
+      "Çocuklar evde sık sık tartışıyordu.",
+      "Babaları onları yeniden barıştırmak istiyordu.",
+      "Bir gün birkaç dal topladı.",
+      "Dalları sıkıca bir araya bağladı.",
+      "Çocuklardan kalın demeti kırmalarını istedi.",
+      "Hiçbiri birbirine bağlı dalları kıramadı.",
+      "Babaları bağlı demeti yavaşça çözdü.",
+      "Dalları çocuklara tek tek verdi.",
+      "Çocuklar ince dalları kolayca kırdı.",
+      "Babaları onlara önemli gerçeği anlattı.",
+      "Birlikte olursanız güçlü kalırsınız dedi.",
+      "Çocuklar artık birbirlerini dikkatle dinledi.",
+      "O günden sonra birlikte çalıştılar."
+    ]
+  },
+  {
+    id: "parayi-veren-dudugu-calar",
+    title: "Nasreddin Hoca - Parayı Veren Düdüğü Çalar",
+    theme: "Emek ve sorumluluk",
+    sentences: [
+      "Nasreddin Hoca bir gün pazara gidiyordu.",
+      "Köyün çocukları çevresine hemen toplandı.",
+      "Hepsi Hoca'dan düdük getirmesini istedi.",
+      "Yalnız bir çocuk parasını verdi.",
+      "Hoca parayı dikkatle cebine koydu.",
+      "Akşam pazardan köye geri döndü.",
+      "Çocuklar heyecanla Hoca'nın yanına koştu.",
+      "Herkes düdüğünün nerede olduğunu sordu.",
+      "Hoca yalnızca bir düdük çıkardı.",
+      "Düdüğü parasını veren çocuğa uzattı.",
+      "Sonra ünlü sözünü gülümseyerek söyledi.",
+      "Parayı veren düdüğü çalar çocuklar."
+    ]
+  },
+  {
+    id: "altin-yumurtlayan-tavuk",
+    title: "Altın Yumurtlayan Tavuk",
+    theme: "Sabırlı olmak ve açgözlü davranmamak",
+    sentences: [
+      "Bir çiftçinin küçük tavuğu vardı.",
+      "Tavuk her sabah kümesten çıkıyordu.",
+      "Bir gün parlak yumurta bıraktı.",
+      "Çiftçi yumurtanın altın olduğunu gördü.",
+      "Bu durum her sabah tekrarlandı.",
+      "Çiftçi kısa sürede zenginleşmeye başladı.",
+      "Fakat daha fazlasını hemen istedi.",
+      "Bütün yumurtaları birlikte bulmayı düşündü.",
+      "Tavuğun küçük yuvasını dikkatle aradı.",
+      "Orada başka altın yumurta bulamadı.",
+      "Artık günlük yumurtalar da yoktu.",
+      "Çiftçi çok sabırsız davrandığını anladı.",
+      "Elindeki güzel fırsatı tamamen kaybetmişti.",
+      "Bundan sonra sabırlı olmaya karar verdi."
+    ]
+  },
+  {
+    id: "koy-faresi-sehir-faresi",
+    title: "Köy Faresi ile Şehir Faresi",
+    theme: "Huzurun ve güvenliğin değeri",
+    sentences: [
+      "Köy faresi tarlada sakin yaşıyordu.",
+      "Bir gün şehir faresi geldi.",
+      "Köydeki sade yiyecekleri birlikte yediler.",
+      "Şehir faresi sofrayı pek beğenmedi.",
+      "Dostunu şehirdeki evine davet etti.",
+      "İki fare birlikte şehre gittiler.",
+      "Masada çeşit çeşit yiyecek vardı.",
+      "Tam yerlerken büyük kapı açıldı.",
+      "Fareler korkuyla küçük deliğe kaçtılar.",
+      "Bir süre sonra yeniden çıktılar.",
+      "Bu kez evin kedisi yaklaştı.",
+      "Köy faresi yine çok korktu.",
+      "Sakin köy yuvasını özlediğini söyledi.",
+      "Huzurlu köyüne sevinçle geri döndü."
+    ]
+  },
+  {
+    id: "uc-kucuk-tavsan",
+    title: "Üç Küçük Tavşan",
+    theme: "Emek vermek ve sağlam hazırlanmak",
+    sentences: [
+      "Üç küçük tavşan ormanda yaşıyordu.",
+      "Kendilerine yeni yuvalar yapmak istediler.",
+      "İlk tavşan yumuşak otlar topladı.",
+      "Otlarla küçük yuvasını çabucak tamamladı.",
+      "İkinci tavşan ince dallar kullandı.",
+      "Onun yuvası biraz daha güçlüydü.",
+      "Üçüncü tavşan sağlam taşlar taşıdı.",
+      "Yuvasını yapmak uzun zaman aldı.",
+      "Gece ormanda kuvvetli fırtına başladı.",
+      "Ot yuva rüzgârla hemen dağıldı.",
+      "Dal yuva da kuvvetle sallandı.",
+      "İki tavşan kardeşlerine doğru koştu.",
+      "Taş yuva fırtınaya karşı dayandı.",
+      "Üç tavşan geceyi güvenle geçirdi.",
+      "Emek vermenin değerini birlikte öğrendiler."
+    ]
+  },
+  {
+    id: "bremen-mizikacilari",
+    title: "Bremen Mızıkacıları",
+    theme: "Dayanışma ve cesaret",
+    sentences: [
+      "Yaşlı eşek artık dinlenmek istiyordu.",
+      "Müzik yapmak için Bremen'e gidiyordu.",
+      "Yolda üzgün bir köpekle karşılaştı.",
+      "Köpek de sevinerek ona katıldı.",
+      "Sonra üzgün bir kedi gördüler.",
+      "Kedi de şarkı söylemek istiyordu.",
+      "Bir horoz da arkadaşlara katıldı.",
+      "Dört arkadaş birlikte yola devam etti.",
+      "Akşam uzakta ışıklı ev gördüler.",
+      "Evin içinde kötü kişiler vardı.",
+      "Hayvanlar korkmadan bir plan yaptılar.",
+      "Hep birlikte üst üste çıkıp seslendiler.",
+      "Yüksek sesleri herkesi çok şaşırttı.",
+      "Kötü kişiler evden hızla kaçtı.",
+      "Dört arkadaş güvenli eve yerleşti.",
+      "Birlikte huzurlu yaşamaya devam ettiler."
+    ]
+  },
+  {
+    id: "mert-sihirli-tas",
+    title: "Mert ve Sihirli Tas",
+    theme: "Paylaşmak ve iyilik yapmak",
+    sentences: [
+      "Mert annesiyle küçük köyde yaşıyordu.",
+      "Bir gün ormanda yaşlı adam gördü.",
+      "Adam ağır sepetini taşımakta zorlanıyordu.",
+      "Mert ona hemen yardım etti.",
+      "Yaşlı adam Mert'e küçük tas verdi.",
+      "Bu tas iyilikle yemek dolduruyordu.",
+      "Mert tası dikkatle evine götürdü.",
+      "Annesiyle birlikte sıcak çorba hazırladılar.",
+      "Çorbayı bütün aç komşularıyla paylaştılar.",
+      "Tas her paylaşımda yeniden doldu.",
+      "Açgözlü komşu tası gizlice aldı.",
+      "Fakat tas onun için çalışmadı.",
+      "Komşu yaptığı hatadan hemen utandı.",
+      "Tası hemen Mert'e geri götürdü.",
+      "Mert pişman komşusunu içtenlikle bağışladı.",
+      "Köylüler paylaşmanın gücünü birlikte öğrendi."
+    ]
+  },
+  {
+    id: "mustafa-dev",
+    title: "Mustafa ile Dev",
+    theme: "Akıl, cesaret ve nezaket",
+    sentences: [
+      "Mustafa dağ köyünde ailesiyle yaşıyordu.",
+      "Köyün çeşmesi bir sabah kesildi.",
+      "Mustafa suyun kaynağını aramaya çıktı.",
+      "Dağın ardında büyük dev gördü.",
+      "Dev su yolunu taşlarla kapatmıştı.",
+      "Mustafa korksa da sakin konuştu.",
+      "Devin neden üzgün olduğunu sordu.",
+      "Dev kendisini yalnız hissettiğini söyledi.",
+      "Mustafa ona arkadaşlık sözü verdi.",
+      "Birlikte ağır taşları kenara çektiler.",
+      "Temiz su yeniden köye ulaştı.",
+      "Köylüler deve teşekkür etmek istediler.",
+      "Hep birlikte büyük sofra kurdular.",
+      "Dev artık dost köylülerden korkmuyordu.",
+      "Mustafa büyük sorunu konuşarak çözmüştü.",
+      "Köyde dostluk içinde yaşam sürdü."
+    ]
+  },
+  {
+    id: "fareli-koy-kavalcisi",
+    title: "Fareli Köyün Kavalcısı",
+    theme: "Verilen sözü tutmak",
+    sentences: [
+      "Küçük kasabayı sayısız fare doldurmuştu.",
+      "Halk bu durumdan çok yorulmuştu.",
+      "Bir gün kavalcı kasabaya geldi.",
+      "Fareleri kasabadan uzağa götüreceğini söyledi.",
+      "Kasaba yöneticisi ödül sözü verdi.",
+      "Kavalcı güzel ezgisini çalmaya başladı.",
+      "Fareler müziği izleyerek kasabadan ayrıldı.",
+      "Halk temiz sokaklara çok sevindi.",
+      "Fakat yönetici verdiği sözü unuttu.",
+      "Kavalcı ona sözünü yeniden hatırlattı.",
+      "Kasaba halkı yöneticiyi dikkatle uyardı.",
+      "Yönetici yaptığı yanlışın farkına vardı.",
+      "Kavalcıya hak ettiği ödülü verdi.",
+      "Herkes verilen sözün önemini anladı.",
+      "Kasaba yeniden huzurla yaşamaya başladı."
+    ]
+  },
+  {
+    id: "tavsan-kirpi",
+    title: "Tavşan ile Kirpi",
+    theme: "Kimseyi küçümsememek",
+    sentences: [
+      "Tavşan ormanda küçük kirpiyle karşılaştı.",
+      "Kirpinin kısa bacaklarına gülmeye başladı.",
+      "Kirpi bu davranışa çok üzüldü.",
+      "Tavşanı küçük yarışa davet etti.",
+      "Kirpi hemen kardeşinden yardım istedi.",
+      "İkisi uzun yolun uçlarına yerleşti.",
+      "Tavşan hızla öteki uca koştu.",
+      "Orada başka kirpiyi görünce şaşırdı.",
+      "Defalarca hızla koşarak yarışı sürdürdü.",
+      "Sonunda iyice yorulup koşmayı bıraktı.",
+      "Kirpiden davranışı için özür diledi.",
+      "Kirpi özrünü hemen kabul etti.",
+      "Tavşan artık kimseyi küçümsememeyi öğrendi."
+    ]
+  },
+  {
+    id: "gole-maya-calmak",
+    title: "Nasreddin Hoca - Göle Maya Çalmak",
+    theme: "Umut etmek ve denemek",
+    sentences: [
+      "Nasreddin Hoca göl kıyısına gitti.",
+      "Elinde küçük yoğurt kabı vardı.",
+      "Yoğurdu tahta kaşıkla göle karıştırdı.",
+      "Onu gören köylüler merakla yaklaştı.",
+      "Hoca'nın ne yaptığını hemen sordular.",
+      "Hoca göle maya çaldığını söyledi.",
+      "İnsanlar gölün asla tutmayacağını söylediler.",
+      "Hoca onların sözlerini sakince dinledi.",
+      "Sonra neşeyle gülümseyerek kaşığını kaldırdı.",
+      "Ya tutarsa diyerek cevap verdi.",
+      "Herkes Hoca'nın güzel umuduna gülümsedi.",
+      "Bazen denemenin değerli olduğunu anladılar."
+    ]
+  }
+];
+
+const STORAGE_KEY = "arife-reading-single-student-v1";
+const el = id => document.getElementById(id);
+const views = [el("libraryView"), el("wordView"), el("ladderView"), el("reviewPromptView"), el("readyView"), el("storyView"), el("resultView"), el("reportView")];
+let roster = { activeId: null, students: {} };
+let story = null;
+let sentences = [];
+let totalStoryWords = 0;
+let progress = null;
+let timerInterval = null;
+let pendingDeleteId = null;
+
+function blankProgress(storyId) {
+  return { storyId, phase: "words", sentenceIndex: 0, queue: null, totalInSentence: 0,
+    masteredInSentence: 0, completedWords: 0, firstTryWords: 0, repeatEvents: 0,
+    repeatedWords: [], ladderRevealed: 0, reviewComplete: false, readingStart: null };
+}
+
+function loadRoster() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (saved && saved.students && typeof saved.students === "object") roster = saved;
+  } catch (_) {}
+  Object.values(roster.students).forEach(student => {
+    if (!student.progresses) {
+      student.progresses = {};
+      if (student.progress && student.progress.storyId) student.progresses[student.progress.storyId] = student.progress;
+      delete student.progress;
+    }
+  });
+}
+
+function activeStudent() { return roster.students[roster.activeId] || null; }
+
+function saveRoster() {
+  const student = activeStudent();
+  if (student && story && progress) {
+    if (!student.progresses) student.progresses = {};
+    student.progresses[story.id] = progress;
+    student.activeStoryId = story.id;
+  }
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(roster)); } catch (_) {}
+}
+
+function refreshStudentSelect() {
+  const select = el("studentSelect");
+  select.innerHTML = "";
+  Object.values(roster.students).forEach(student => {
+    const option = document.createElement("option");
+    option.value = student.id;
+    option.textContent = student.name;
+    option.selected = student.id === roster.activeId;
+    select.appendChild(option);
+  });
+  if (!select.children.length) {
+    const option = document.createElement("option");
+    option.textContent = "Öğrenci ekleyin";
+    option.value = "";
+    select.appendChild(option);
+  }
+}
+
+function addStudent(name) {
+  const id = `student-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  roster.students[id] = { id, name: name.trim(), progresses: {}, reports: [] };
+  roster.activeId = id;
+  story = null;
+  progress = null;
+  saveRoster();
+  refreshStudentSelect();
+  showLibrary();
+}
+
+function renderStudentManager() {
+  const list = el("studentManagerList");
+  list.innerHTML = "";
+  const students = Object.values(roster.students);
+  if (!students.length) {
+    const empty = document.createElement("div");
+    empty.className = "manager-empty";
+    empty.textContent = "Henüz öğrenci eklenmedi.";
+    list.appendChild(empty);
+    return;
+  }
+  students.forEach(student => {
+    const row = document.createElement("div");
+    row.className = "manager-row";
+    const name = document.createElement("span");
+    name.textContent = student.name;
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "reset danger";
+    remove.textContent = "Sil…";
+    remove.addEventListener("click", () => requestStudentDelete(student.id));
+    row.append(name, remove);
+    list.appendChild(row);
+  });
+}
+
+function openTeacherDialog() {
+  el("teacherPassword").value = "";
+  el("passwordError").textContent = "";
+  el("teacherLoginForm").classList.remove("hidden");
+  el("teacherPanel").classList.add("hidden");
+  el("teacherDialog").showModal();
+  window.setTimeout(() => el("teacherPassword").focus(), 50);
+}
+
+function openTeacherPanel() {
+  el("teacherLoginForm").classList.add("hidden");
+  el("teacherPanel").classList.remove("hidden");
+  el("studentName").value = "";
+  renderStudentManager();
+  window.setTimeout(() => el("studentName").focus(), 50);
+}
+
+function requestStudentDelete(studentId) {
+  const student = roster.students[studentId];
+  if (!student) return;
+  pendingDeleteId = studentId;
+  el("deleteStudentText").textContent = `${student.name} adlı öğrenciyi silmek istediğinize emin misiniz?`;
+  el("deleteStudentDialog").showModal();
+}
+
+function deletePendingStudent() {
+  if (!pendingDeleteId || !roster.students[pendingDeleteId]) return;
+  const deletingActive = roster.activeId === pendingDeleteId;
+  delete roster.students[pendingDeleteId];
+  if (deletingActive) roster.activeId = Object.keys(roster.students)[0] || null;
+  pendingDeleteId = null;
+  story = null;
+  progress = null;
+  saveRoster();
+  refreshStudentSelect();
+  renderStudentManager();
+  el("deleteStudentDialog").close();
+  showLibrary();
+}
+
+function selectStudent(id) {
+  if (!roster.students[id]) return;
+  saveRoster();
+  roster.activeId = id;
+  story = null;
+  progress = null;
+  saveRoster();
+  showLibrary();
+}
+
+function show(view) {
+  views.forEach(item => item.classList.toggle("hidden", item !== view));
+  if (view !== el("storyView")) stopTimerDisplay();
+}
+
+function storyIsComplete(itemProgress) {
+  return Boolean(itemProgress && itemProgress.phase === "result");
+}
+
+function showLibrary() {
+  saveRoster();
+  story = null;
+  progress = null;
+  document.querySelector(".brand h1").textContent = "Akıcı Okuma Hikâyeleri";
+  el("progressBar").closest(".progress-card").classList.add("hidden");
+  const grid = el("storyGrid");
+  grid.innerHTML = "";
+  const student = activeStudent();
+  stories.forEach((item, index) => {
+    const itemProgress = student && student.progresses ? student.progresses[item.id] : null;
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = "story-card";
+    const number = document.createElement("span");
+    number.className = "story-number";
+    number.textContent = `Hikâye ${index + 1} · ${item.sentences.length} cümle`;
+    const title = document.createElement("h3");
+    title.textContent = item.title;
+    const theme = document.createElement("p");
+    theme.textContent = item.theme;
+    const status = document.createElement("span");
+    status.className = "story-status";
+    if (storyIsComplete(itemProgress)) status.textContent = "✓ Tamamlandı";
+    else if (itemProgress && itemProgress.completedWords) status.textContent = `%${Math.round(itemProgress.completedWords / countWords(item) * 100)} tamamlandı`;
+    else status.textContent = "Başla →";
+    card.append(number, title, theme, status);
+    card.addEventListener("click", () => selectStory(item.id));
+    grid.appendChild(card);
+  });
+  show(el("libraryView"));
+}
+
+function countWords(item) { return item.sentences.reduce((sum, sentence) => sum + sentence.split(/\s+/).length, 0); }
+
+function studentReports() {
+  const student = activeStudent();
+  if (!student.reports) student.reports = [];
+  const firstByStory = new Map();
+  student.reports.slice().sort((a, b) => a.date - b.date).forEach(item => {
+    if (item.storyId && !firstByStory.has(item.storyId)) firstByStory.set(item.storyId, item);
+  });
+  if (firstByStory.size !== student.reports.length) {
+    student.reports = [...firstByStory.values()];
+    saveRoster();
+  }
+  return student.reports;
+}
+
+function formatDate(value) {
+  return new Intl.DateTimeFormat("tr-TR", { dateStyle: "short", timeStyle: "short" }).format(new Date(value));
+}
+
+function showReport() {
+  saveRoster();
+  story = null;
+  progress = null;
+  document.querySelector(".brand h1").textContent = "Okuma Raporu";
+  el("progressBar").closest(".progress-card").classList.add("hidden");
+  const student = activeStudent();
+  const reports = student ? studentReports().slice().sort((a, b) => {
+    const aIndex = stories.findIndex(item => item.id === a.storyId);
+    const bIndex = stories.findIndex(item => item.id === b.storyId);
+    return aIndex - bIndex;
+  }) : [];
+  el("reportSubtitle").textContent = student ? `${student.name} için her hikâyenin yalnızca ilk okuma sonucu` : "Önce bir öğrenci ekleyin.";
+  const list = el("reportList");
+  list.innerHTML = "";
+  if (!reports.length) {
+    const empty = document.createElement("div");
+    empty.className = "empty-report";
+    empty.textContent = "Henüz süreli metin okuması tamamlanmadı.";
+    list.appendChild(empty);
+  } else {
+    const maxKdk = Math.max(1, ...reports.map(item => item.kdk));
+    reports.forEach(item => {
+      const row = document.createElement("article");
+      row.className = "report-row";
+      const accuracy = Math.round((item.firstTryWords / item.totalWords) * 100);
+      const storyNumber = stories.findIndex(storyItem => storyItem.id === item.storyId) + 1;
+      row.innerHTML = `<div class="report-head"><span>${storyNumber ? `Hikâye ${storyNumber} · ` : ""}${item.storyTitle}</span><span class="report-date">İlk okuma · ${formatDate(item.date)}</span></div>
+        <div class="metric"><span>Tekrarsız okuma</span><div class="metric-track"><div class="metric-fill" style="width:${accuracy}%"></div></div><strong>${item.firstTryWords}/${item.totalWords}</strong></div>
+        <div class="metric"><span>Okuma hızı</span><div class="metric-track"><div class="metric-fill speed" style="width:${Math.round(item.kdk / maxKdk * 100)}%"></div></div><strong>${item.kdk} KDK</strong></div>`;
+      list.appendChild(row);
+    });
+  }
+  show(el("reportView"));
+}
+
+function selectStory(storyId) {
+  story = stories.find(item => item.id === storyId);
+  if (!story || !activeStudent()) return;
+  sentences = story.sentences;
+  totalStoryWords = countWords(story);
+  if (!activeStudent().progresses) activeStudent().progresses = {};
+  progress = activeStudent().progresses[story.id] || blankProgress(story.id);
+  activeStudent().progresses[story.id] = progress;
+  el("progressBar").closest(".progress-card").classList.remove("hidden");
+  document.querySelector(".brand h1").textContent = story.title;
+  saveRoster();
+  renderPhase();
+}
+
+function shuffledWords(sentence) {
+  const words = sentence.split(/\s+/).map((word, index) => ({
+    id: `${progress.sentenceIndex}-${index}`, word: word.replace(/[.,!?;:]$/u, "").toLocaleLowerCase("tr-TR"), attempts: 0
+  }));
+  for (let i = words.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [words[i], words[j]] = [words[j], words[i]];
+  }
+  return words;
+}
+
+function updateProgress() {
+  if (!story || !progress) return;
+  const percent = Math.min(100, Math.round((progress.completedWords / totalStoryWords) * 100));
+  el("progressBar").style.width = `${percent}%`;
+  el("progressText").textContent = `%${percent} tamamlandı`;
+  if (progress.phase === "review") el("sectionLabel").textContent = "Tekrar kelimeleri";
+  else if (progress.sentenceIndex < sentences.length) el("sectionLabel").textContent = `Cümle ${progress.sentenceIndex + 1} / ${sentences.length}`;
+  else el("sectionLabel").textContent = "Hikâyenin tamamı";
+}
+
+function startSentence(fresh = false) {
+  if (fresh || !Array.isArray(progress.queue)) {
+    progress.queue = shuffledWords(sentences[progress.sentenceIndex]);
+    progress.totalInSentence = progress.queue.length;
+    progress.masteredInSentence = 0;
+  }
+  progress.phase = "words";
+  saveRoster();
+  show(el("wordView"));
+  el("wordTitle").textContent = "Kutudaki kelimeyi oku";
+  renderWord();
+  updateProgress();
+}
+
+function renderWord() {
+  if (!progress.queue || !progress.queue.length) {
+    if (progress.phase === "review") return finishReview();
+    progress.phase = "ladder";
+    progress.ladderRevealed = Math.max(1, progress.ladderRevealed || 0);
+    saveRoster();
+    return showLadder();
+  }
+  const current = progress.queue[0];
+  const box = el("wordBox");
+  box.textContent = current.word;
+  box.style.animation = "none";
+  requestAnimationFrame(() => { box.style.animation = ""; });
+  if (progress.phase === "review") {
+    el("wordTitle").textContent = "Tekrara düşen kelimeyi oku";
+    el("wordCount").textContent = `${progress.queue.length} tekrar kelimesi kaldı`;
+  } else {
+    el("wordCount").textContent = `${progress.masteredInSentence} / ${progress.totalInSentence} kelime tamamlandı`;
+  }
+  el("announcement").textContent = `Sıradaki kelime: ${current.word}`;
+}
+
+function rateWord(result) {
+  if (!progress || !progress.queue || !progress.queue.length) return;
+  const current = progress.queue.shift();
+  if (result === "again") {
+    current.attempts = (current.attempts || 0) + 1;
+    progress.queue.push(current);
+    if (progress.phase !== "review") {
+      progress.repeatEvents += 1;
+      if (!progress.repeatedWords.includes(current.word)) progress.repeatedWords.push(current.word);
+    }
+    el("announcement").textContent = `${current.word} sıranın sonuna eklendi.`;
+  } else if (progress.phase === "review") {
+    el("announcement").textContent = `${current.word} tekrar çalışmasında tamamlandı.`;
+  } else {
+    progress.masteredInSentence += 1;
+    progress.completedWords += 1;
+    if ((current.attempts || 0) === 0) progress.firstTryWords += 1;
+    el("announcement").textContent = `${current.word} tamamlandı.`;
+  }
+  saveRoster();
+  updateProgress();
+  window.setTimeout(renderWord, 80);
+}
+
+function appendLadderStep(words, index, ladder, interactive) {
+  const step = document.createElement("button");
+  step.type = "button";
+  step.className = "step";
+  step.style.setProperty("--w", `${Math.max(42, 48 + index * (48 / Math.max(1, words.length - 1)))}%`);
+  const startIndex = words.length - index - 1;
+  const fullText = words.slice(startIndex).join(" ");
+  const highlighted = document.createElement("span");
+  highlighted.className = "new-word";
+  highlighted.textContent = words[startIndex];
+  step.appendChild(highlighted);
+  if (index > 0) {
+    const remainder = document.createElement("span");
+    remainder.textContent = words.slice(startIndex + 1).join(" ");
+    step.appendChild(remainder);
+  }
+  step.disabled = !interactive;
+  if (interactive) {
+    const finalStep = index === words.length - 1;
+    step.setAttribute("aria-label", finalStep ? `${fullText}. Cümleyi tamamla.` : `${fullText}. Sonraki basamağı aç.`);
+    step.addEventListener("click", () => {
+      step.disabled = true;
+      step.removeAttribute("aria-label");
+      if (finalStep) {
+        progress.phase = "ladderDone";
+        el("nextSentence").classList.remove("hidden");
+        el("announcement").textContent = "Cümle tamamlandı. Devam edebilirsiniz.";
+      } else {
+        progress.ladderRevealed += 1;
+        appendLadderStep(words, index + 1, ladder, true);
+        ladder.lastElementChild.focus({ preventScroll: true });
+        el("announcement").textContent = "Yeni basamak açıldı.";
+      }
+      saveRoster();
+    });
+  }
+  ladder.appendChild(step);
+}
+
+function showLadder() {
+  const words = sentences[progress.sentenceIndex].toLocaleLowerCase("tr-TR").split(/\s+/);
+  const ladder = el("ladder");
+  ladder.innerHTML = "";
+  const done = progress.phase === "ladderDone";
+  const visible = done ? words.length : Math.min(words.length, Math.max(1, progress.ladderRevealed || 1));
+  for (let index = 0; index < visible; index++) appendLadderStep(words, index, ladder, !done && index === visible - 1);
+  el("nextSentence").classList.toggle("hidden", !done);
+  el("nextSentence").textContent = progress.sentenceIndex === sentences.length - 1
+    ? (progress.repeatedWords.length ? "Tekrar kelimelerine geç →" : "Metin okumasına geç →")
+    : "Cümleyi okudum, devam et →";
+  show(el("ladderView"));
+  updateProgress();
+}
+
+function advanceSentence() {
+  progress.sentenceIndex += 1;
+  progress.queue = null;
+  progress.ladderRevealed = 0;
+  if (progress.sentenceIndex >= sentences.length) {
+    progress.phase = progress.repeatedWords.length && !progress.reviewComplete ? "reviewPrompt" : "ready";
+    saveRoster();
+    if (progress.phase === "reviewPrompt") showReviewPrompt(); else showReady();
+  } else startSentence(true);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function showReviewPrompt() {
+  progress.phase = "reviewPrompt";
+  el("reviewPromptCount").textContent = progress.repeatedWords.length;
+  show(el("reviewPromptView"));
+  saveRoster();
+  updateProgress();
+}
+
+function showReady() {
+  progress.phase = "ready";
+  progress.readingStart = null;
+  show(el("readyView"));
+  saveRoster();
+  updateProgress();
+}
+
+function timerText(seconds) {
+  const minutes = Math.floor(seconds / 60).toString().padStart(2, "0");
+  const rest = Math.floor(seconds % 60).toString().padStart(2, "0");
+  return `${minutes}:${rest}`;
+}
+
+function updateTimerDisplay() {
+  if (!progress || !progress.readingStart) return;
+  el("timer").textContent = timerText((Date.now() - progress.readingStart) / 1000);
+}
+
+function stopTimerDisplay() {
+  if (timerInterval) window.clearInterval(timerInterval);
+  timerInterval = null;
+}
+
+function beginReading() {
+  if (!progress || !story) return;
+  progress.phase = "reading";
+  progress.readingStart = Date.now();
+  saveRoster();
+  showStory();
+}
+
+function showStory() {
+  progress.phase = "reading";
+  el("storyTitle").textContent = story.title;
+  el("story").textContent = sentences.join(" ");
+  show(el("storyView"));
+  updateTimerDisplay();
+  stopTimerDisplay();
+  timerInterval = window.setInterval(updateTimerDisplay, 250);
+  saveRoster();
+  updateProgress();
+}
+
+function finishReading() {
+  if (!progress || !progress.readingStart || !story) return;
+  const finishedAt = Date.now();
+  const seconds = Math.max(1, Math.round((finishedAt - progress.readingStart) / 1000));
+  const kdk = Math.round((totalStoryWords * 60) / seconds);
+  const report = { id: `${finishedAt}-${story.id}`, date: finishedAt, storyId: story.id,
+    storyTitle: story.title, totalWords: totalStoryWords, firstTryWords: progress.firstTryWords,
+    repeatEvents: progress.repeatEvents, seconds, kdk };
+  const existingReport = studentReports().find(item => item.storyId === story.id);
+  const counted = !existingReport;
+  if (counted) studentReports().push(report);
+  progress.phase = "result";
+  progress.readingStart = null;
+  progress.lastResult = existingReport || report;
+  progress.lastReadingCounted = counted;
+  saveRoster();
+  showResult(existingReport || report, counted);
+}
+
+function showResult(report, counted) {
+  if (typeof report === "undefined") report = progress ? progress.lastResult : null;
+  if (typeof counted === "undefined") counted = progress ? progress.lastReadingCounted !== false : true;
+  if (!report) return showReady();
+  el("resultTitle").textContent = story ? `${story.title} sonucu` : "Okuma sonucu";
+  el("resultAccuracy").textContent = `${report.firstTryWords} / ${report.totalWords}`;
+  el("resultKdk").textContent = `${report.kdk} KDK`;
+  el("resultTime").textContent = counted
+    ? `İlk okuma sonucu kaydedildi. Metin ${timerText(report.seconds)} sürede tamamlandı.`
+    : "Bu hikâyenin ilk okuma sonucu daha önce kaydedildi. Yeni okuma rapora eklenmedi.";
+  show(el("resultView"));
+  updateProgress();
+}
+
+function startReview() {
+  if (!progress.repeatedWords.length) return showStory();
+  progress.phase = "review";
+  progress.queue = progress.repeatedWords.map((word, index) => ({ id: `review-${index}`, word, attempts: 0 }));
+  saveRoster();
+  show(el("wordView"));
+  renderWord();
+  updateProgress();
+}
+
+function finishReview() {
+  progress.reviewComplete = true;
+  progress.queue = null;
+  progress.phase = "ready";
+  saveRoster();
+  showReady();
+  el("announcement").textContent = "Tekrar kelimeleri tamamlandı.";
+}
+
+function restart() {
+  if (!activeStudent()) return openTeacherDialog();
+  if (!story) return showLibrary();
+  progress = blankProgress(story.id);
+  activeStudent().progresses[story.id] = progress;
+  saveRoster();
+  startSentence(true);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function renderPhase() {
+  if (!progress || !story) return showLibrary();
+  if (progress.phase === "story") return showReady();
+  if (progress.phase === "ready") return showReady();
+  if (progress.phase === "reading") return progress.readingStart ? showStory() : showReady();
+  if (progress.phase === "result") return showResult();
+  if (progress.phase === "reviewPrompt") return showReviewPrompt();
+  if (progress.phase === "review") { show(el("wordView")); renderWord(); return updateProgress(); }
+  if (progress.phase === "ladder" || progress.phase === "ladderDone") return showLadder();
+  startSentence(false);
+}
+
+el("known").addEventListener("click", () => rateWord("known"));
+el("again").addEventListener("click", () => rateWord("again"));
+el("nextSentence").addEventListener("click", advanceSentence);
+el("beginReview").addEventListener("click", startReview);
+el("beginReading").addEventListener("click", beginReading);
+el("finishReading").addEventListener("click", finishReading);
+el("resultReport").addEventListener("click", showReport);
+el("resultStories").addEventListener("click", showLibrary);
+el("reset").addEventListener("click", restart);
+el("storyHome").addEventListener("click", showLibrary);
+el("reportHome").addEventListener("click", showReport);
+if (el("teacherButton")) el("teacherButton").addEventListener("click", openTeacherDialog);
+if (el("cancelTeacherLogin")) el("cancelTeacherLogin").addEventListener("click", () => el("teacherDialog").close());
+if (el("closeTeacherPanel")) el("closeTeacherPanel").addEventListener("click", () => el("teacherDialog").close());
+if (el("teacherLoginForm")) el("teacherLoginForm").addEventListener("submit", event => {
+  event.preventDefault();
+  if (el("teacherPassword").value === "2024") return openTeacherPanel();
+  el("passwordError").textContent = "Şifre yanlış.";
+  el("teacherPassword").select();
+});
+if (el("cancelDeleteStudent")) el("cancelDeleteStudent").addEventListener("click", () => {
+  pendingDeleteId = null;
+  el("deleteStudentDialog").close();
+});
+if (el("confirmDeleteStudent")) el("confirmDeleteStudent").addEventListener("click", deletePendingStudent);
+el("studentSelect").addEventListener("change", event => selectStudent(event.target.value));
+if (el("studentForm")) el("studentForm").addEventListener("submit", event => {
+  event.preventDefault();
+  const name = el("studentName").value.trim();
+  if (!name) return;
+  addStudent(name);
+  el("studentName").value = "";
+  renderStudentManager();
+  el("studentName").focus();
+});
+document.addEventListener("keydown", event => {
+  if (!el("wordView").classList.contains("hidden")) {
+    if (event.key === "ArrowRight") rateWord("known");
+    if (event.key === "ArrowLeft") rateWord("again");
+  }
+});
+
+function registerWebMCP() {
+  const context = document.modelContext;
+  if (!context || !context.registerTool) return;
+  const tools = [{
+    name: "rate_current_word", title: "Kelimeyi değerlendir",
+    description: "Ekrandaki kelimeyi tek seferde okundu veya tekrar edilmeli olarak işaretler.",
+    inputSchema: { type: "object", properties: { result: { type: "string", enum: ["known", "again"] } }, required: ["result"], additionalProperties: false },
+    annotations: { readOnlyHint: false, untrustedContentHint: false },
+    execute(input) {
+      if (!input || !["known", "again"].includes(input.result) || el("wordView").classList.contains("hidden")) throw new Error("Kelime değerlendirme aşaması etkin değil.");
+      rateWord(input.result);
+      return { result: input.result, remaining: progress.queue ? progress.queue.length : 0, sentence: progress.sentenceIndex + 1, story: story.id };
+    }
+  }];
+  tools.forEach(tool => { try { Promise.resolve(context.registerTool(tool)).catch(() => {}); } catch (_) {} });
+}
+
+loadRoster();
+const savedSingleStudent = roster.students[roster.activeId] || Object.values(roster.students)[0];
+roster = {
+  activeId: "single-student",
+  students: {
+    "single-student": savedSingleStudent
+      ? { ...savedSingleStudent, id: "single-student", name: "Öğrenci" }
+      : { id: "single-student", name: "Öğrenci", progresses: {}, reports: [] }
+  }
+};
+saveRoster();
+refreshStudentSelect();
+showLibrary();
+registerWebMCP();
+
+
+  updateUsageBadge();
+  window.setInterval(updateUsageBadge, 60000);
+})();
+</script>
+</body>
+</html>
